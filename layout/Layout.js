@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Text, TouchableHighlight, View } from 'react-native';
-import { Constants } from 'expo';
+import Constants from 'expo-constants'
 
 const Layout = ({children, screen, onMenuChange}) => 
-    <View style={{display: 'flex', flex: 1, flexDirection: 'column', paddingTop: Constants.statusBarHeight,}}>
+    <View style={{display: 'flex', flex: 1, flexDirection: 'column', padding: 5, paddingTop: Constants.statusBarHeight,}}>
         <View style={{display: 'flex', flexDirection: 'row'}}>
             <MenuButton
                 onPress={() => onMenuChange('characters')}
