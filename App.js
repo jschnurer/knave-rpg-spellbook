@@ -83,9 +83,18 @@ export default class App extends React.Component {
     }
   }
 
-  onRenameCharacter = (newName) => {
+  onRenameCharacter = (newName, renamingCharacter) => {
+    if(!newName || !newName.trim()) {
+      return;
+    }
+
     let characters = _cloneDeep(this.state.characters);
-    let char = characters.find(x => x.id === this.state.renamingCharacter.id);
+    let char = characters.find(x => x.id === renamingCharacter.id);
+    let sameNameChar = characters.find(x => x.id !== renamingCharacter.id && x.name === newName);
+    if(sameNameChar) {
+      return;
+    }
+
     char.name = newName;
 
     this.setState({
@@ -125,6 +134,10 @@ export default class App extends React.Component {
   }
 
   onSelectCharacter = async (character) => {
+    if(this.state.characterId === character.id) {
+      return;
+    }
+
     try {
       await AsyncStorage.setItem('ActiveCharacterId', character === null ? "-1" : character.id.toString());
       this.setState({

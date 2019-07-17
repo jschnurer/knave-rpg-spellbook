@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
-import { Button, TouchableHighlight, Text } from 'react-native';
+import { Button, TouchableOpacity, Text } from 'react-native';
 
 const Character = ({ id, name, isActive, onSelect, onDelete, onEdit }) =>
-    <TouchableHighlight style={{
+    <TouchableOpacity style={{
         flex: 1,
         flexDirection: 'row',
         borderStyle: 'solid',
@@ -21,6 +21,6 @@ const Character = ({ id, name, isActive, onSelect, onDelete, onEdit }) =>
             <Button title="Edit" onPress={onEdit} style={{marginRight: 5,}} />
             <Button title="Delete" onPress={onDelete} />
         </Fragment>
-    </TouchableHighlight>;
+    </TouchableOpacity>;
 
 export default Character;

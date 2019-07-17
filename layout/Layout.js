@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, TouchableHighlight, View } from 'react-native';
+import { Button, Text, TouchableOpacity, View } from 'react-native';
 import Constants from 'expo-constants'
 
 const Layout = ({children, screen, onMenuChange}) => 
@@ -35,7 +35,7 @@ const Layout = ({children, screen, onMenuChange}) =>
     </View>;
 
 const MenuButton = ({title, active, onPress}) =>
-    <TouchableHighlight
+    <TouchableOpacity
         onPress={onPress}
         style={{
             flex: 1,
@@ -44,6 +44,6 @@ const MenuButton = ({title, active, onPress}) =>
             padding: 6,
         }}>
         <Text style={{textAlign: 'center', color: 'white', fontSize: 16 }}>{title}</Text>
-    </TouchableHighlight>
+    </TouchableOpacity>
 
 export default Layout;

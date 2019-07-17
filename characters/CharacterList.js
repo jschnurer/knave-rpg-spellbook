@@ -78,7 +78,7 @@ export default class CharacterList extends React.Component {
                         title="New Character Name"
                         visible={renamingCharacter !== null}
                         onCancel={this.closeRenamePrompt}
-                        onSubmit={(name) => { this.props.onRenameCharacter(name); this.closeRenamePrompt(); }}
+                        onSubmit={(name) => { this.props.onRenameCharacter(name, renamingCharacter); this.closeRenamePrompt(); }}
                     />
                 }
             </View>
