@@ -173,6 +173,7 @@ export default class App extends React.Component {
       <Layout screen={this.state.screen} onMenuChange={this.onMenuChange}>
         {this.state.screen === 'characters' &&
           <CharacterList
+            characters={this.state.characters}
             onCreateNewCharacter={this.onCreateNewCharacter}
             onRenameCharacter={this.onRenameCharacter}
             onDeleteCharacter={this.onDeleteCharacter}

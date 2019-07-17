@@ -35,7 +35,9 @@ export default class CharacterList extends React.Component {
     }
 
     render() {
-        const {isLoading, characters, newCharPromptVisible, renamingCharacter} = this.state;
+        const {isLoading, newCharPromptVisible, renamingCharacter} = this.state;
+        const {characters} = this.props;
+        console.log(this.props);
 
         if(isLoading) {
             return <Text>Loading...</Text>;
