@@ -163,7 +163,7 @@ export default class App extends React.Component {
 
     if (addOrRemove === 'add') {
       character.favorites.push(spell.name);
-    } else if(addOrRemove === 'remove') {
+    } else if (addOrRemove === 'remove') {
       character.favorites.splice(spellIx, 1);
     }
 
@@ -185,26 +185,28 @@ export default class App extends React.Component {
   render() {
     return (
       <Layout screen={this.state.screen} onMenuChange={this.onMenuChange}>
-        {this.state.screen === 'characters' &&
-          <CharacterList
-            characters={this.state.characters}
-            onCreateNewCharacter={this.onCreateNewCharacter}
-            onRenameCharacter={this.onRenameCharacter}
-            onDeleteCharacter={this.onDeleteCharacter}
-            onSelectCharacter={this.onSelectCharacter}
-            activeCharacter={this.getActiveCharacter()} />
-        }
-        {this.state.screen === 'favorites' &&
-          <Spellbook
-            showFavorites
-            activeCharacter={this.getActiveCharacter()}
-            onRemoveFavorite={this.onRemoveFavorite} />
-        }
-        {this.state.screen === 'list' &&
-          <Spellbook
-            showFavorites={false}
-            onAddFavorite={this.onAddFavorite} />
-        }
+        <View style={{ padding: 5, flex: 1, display: 'flex', flexDirection: 'column', }}>
+          {this.state.screen === 'characters' &&
+            <CharacterList
+              characters={this.state.characters}
+              onCreateNewCharacter={this.onCreateNewCharacter}
+              onRenameCharacter={this.onRenameCharacter}
+              onDeleteCharacter={this.onDeleteCharacter}
+              onSelectCharacter={this.onSelectCharacter}
+              activeCharacter={this.getActiveCharacter()} />
+          }
+          {this.state.screen === 'favorites' &&
+            <Spellbook
+              showFavorites
+              activeCharacter={this.getActiveCharacter()}
+              onRemoveFavorite={this.onRemoveFavorite} />
+          }
+          {this.state.screen === 'list' &&
+            <Spellbook
+              showFavorites={false}
+              onAddFavorite={this.onAddFavorite} />
+          }
+        </View>
       </Layout>
     );
   }

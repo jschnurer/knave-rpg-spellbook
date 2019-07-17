@@ -18,7 +18,7 @@ const Character = ({ id, name, isActive, onSelect, onDelete, onEdit }) =>
         onPress={onSelect}>
         <Fragment>
             <Text style={{ color: isActive ? '#000' : '#fff', fontSize: 16, flex: 1, }}>{name}</Text>
-            <Button title="Edit" onPress={onEdit} />
+            <Button title="Edit" onPress={onEdit} style={{marginRight: 5,}} />
             <Button title="Delete" onPress={onDelete} />
         </Fragment>
     </TouchableHighlight>;
