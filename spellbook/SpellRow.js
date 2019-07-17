@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Button, Text, TouchableHighlight, View } from 'react-native';
+import { Button, Text, TouchableOpacity, View } from 'react-native';
 
 export default class SpellRow extends React.Component {
     state = {
@@ -16,12 +16,10 @@ export default class SpellRow extends React.Component {
         const { name, description, onLongPress } = this.props;
 
         return (
-            <TouchableHighlight style={{
+            <TouchableOpacity style={{
                 padding: 2,
-                paddingTop: 5,
-                paddingBottom: 5,
-                marginTop: 2,
-                marginBottom: 2,
+                paddingTop: 15,
+                paddingBottom: 15,
                 borderBottomColor: 'silver',
                 borderBottomWidth: 1,
                 borderStyle: 'solid',
@@ -35,7 +33,7 @@ export default class SpellRow extends React.Component {
                         <Text>{description}</Text>
                     }
                 </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
         );
     }
 }

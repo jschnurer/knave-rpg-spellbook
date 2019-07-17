@@ -3,7 +3,7 @@ import { FlatList, Text, View } from 'react-native';
 import spells from './spells.json';
 import SpellRow from './SpellRow.js';
 
-const Spellbook = ({ onAddFavorite, showFavorites, activeCharacter }) => {
+const Spellbook = ({ onAddFavorite, onRemoveFavorite, showFavorites, activeCharacter }) => {
     if(showFavorites) {
         if(!activeCharacter) {
             return <Text>Select a character first.</Text>;

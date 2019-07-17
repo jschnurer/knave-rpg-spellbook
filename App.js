@@ -4,6 +4,7 @@ import Spellbook from './spellbook/Spellbook';
 import Layout from './layout/Layout';
 import CharacterList from './characters/CharacterList';
 import _cloneDeep from 'lodash/cloneDeep';
+import * as Haptics from 'expo-haptics';
 
 export default class App extends React.Component {
   state = {
@@ -135,6 +136,14 @@ export default class App extends React.Component {
   }
 
   onAddFavorite = (spell) => {
+    this.modifyFavoriteSpell(spell, 'add');
+  }
+
+  onRemoveFavorite = (spell) => {
+    this.modifyFavoriteSpell(spell, 'remove');
+  }
+
+  modifyFavoriteSpell = (spell, addOrRemove) => {
     if (!this.state.characterId) {
       return;
     }
@@ -145,21 +154,26 @@ export default class App extends React.Component {
       character.favorites = [];
     }
 
-    if (character.favorites.indexOf(spell.name) > -1) {
+    let spellIx = character.favorites.indexOf(spell.name);
+
+    if ((addOrRemove === 'add' && spellIx > -1)
+      || (addOrRemove === 'remove' && spellIx === -1)) {
       return;
     }
 
-    character.favorites.push(spell.name);
+    if (addOrRemove === 'add') {
+      character.favorites.push(spell.name);
+    } else if(addOrRemove === 'remove') {
+      character.favorites.splice(spellIx, 1);
+    }
 
     this.setState({
       characters,
     });
 
     this.saveCharacters(characters);
-  }
 
-  onRemoveFavorite = (spell) => {
-
+    Haptics.selectionAsync();
   }
 
   getActiveCharacter = () => {
