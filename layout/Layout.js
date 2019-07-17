@@ -8,6 +8,7 @@ const Layout = ({children, screen, onMenuChange}) =>
         flex: 1,
         flexDirection: 'column',
         paddingTop: Constants.statusBarHeight,
+        backgroundColor: '#222',
     }}>
         <View style={{
             display: 'flex',

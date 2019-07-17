@@ -5,6 +5,7 @@ import Layout from './layout/Layout';
 import CharacterList from './characters/CharacterList';
 import _cloneDeep from 'lodash/cloneDeep';
 import * as Haptics from 'expo-haptics';
+import {ToastAndroid} from 'react-native';
 
 export default class App extends React.Component {
   state = {
@@ -61,8 +62,30 @@ export default class App extends React.Component {
     }));
   }
 
-  onCreateNewCharacter = (name) => {
+  validateName = (name, existingCharacter) => {
     if (!name || !name.trim()) {
+      ToastAndroid.show('Invalid name provided!', ToastAndroid.SHORT);
+      return false;
+    }
+
+    let sameNameChar = null;
+
+    if(existingCharacter) {
+      sameNameChar = this.state.characters.find(x => x.id !== existingCharacter.id && x.name === name);
+    } else {
+      sameNameChar = this.state.characters.find(x => x.name === name);
+    }
+
+    if(sameNameChar) {
+      ToastAndroid.show(`Another character is already named ${name}!`, ToastAndroid.SHORT);
+      return false;
+    }
+
+    return true;
+  }
+
+  onCreateNewCharacter = (name) => {
+    if (!this.validateName(name)) {
       return;
     }
 
@@ -84,17 +107,12 @@ export default class App extends React.Component {
   }
 
   onRenameCharacter = (newName, renamingCharacter) => {
-    if(!newName || !newName.trim()) {
+    if (!this.validateName(newName, renamingCharacter)) {
       return;
     }
 
     let characters = _cloneDeep(this.state.characters);
     let char = characters.find(x => x.id === renamingCharacter.id);
-    let sameNameChar = characters.find(x => x.id !== renamingCharacter.id && x.name === newName);
-    if(sameNameChar) {
-      return;
-    }
-
     char.name = newName;
 
     this.setState({

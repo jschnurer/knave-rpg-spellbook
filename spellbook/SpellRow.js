@@ -20,17 +20,18 @@ export default class SpellRow extends React.Component {
                 padding: 2,
                 paddingTop: 15,
                 paddingBottom: 15,
-                borderBottomColor: 'silver',
+                borderBottomColor: '#D59108',
                 borderBottomWidth: 1,
                 borderStyle: 'solid',
                 justifyContent: 'center',
+                backgroundColor: '#333',
             }}
             onLongPress={onLongPress}
             onPress={this.toggleSpell}>
                 <View style={{flexDirection: 'column'}}>
-                    <Text>{name}</Text>
+                    <Text style={{color: '#DEA011'}}>{name}</Text>
                     { this.state.opened &&
-                        <Text>{description}</Text>
+                        <Text style={{color: '#D59108'}}>{description}</Text>
                     }
                 </View>
             </TouchableOpacity>
