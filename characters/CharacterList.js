@@ -6,35 +6,8 @@ import Character from './Character';
 
 export default class CharacterList extends React.Component {
     state = {
-        characters: [],
-        isLoading: false,
         newCharPromptVisible: false,
         renamingCharacter: null,
-    }
-
-    componentDidMount() {
-        this.loadCharacters();
-    }
-
-    loadCharacters = async () => {
-        try {
-            const value = await AsyncStorage.getItem('CharacterList');
-            if (value !== null) {
-                let characters = JSON.parse(value);
-
-                this.setState({
-                    characters,
-                    isLoading: false,
-                });
-            } else {
-                this.setState({
-                    characters: [],
-                    isLoading: false,
-                });
-            }
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     openNewCharPrompt = () => {
@@ -49,44 +22,7 @@ export default class CharacterList extends React.Component {
         });
     }
 
-    createNewCharacter = (name) => {
-        if(!name || !name.trim()) {
-            return;
-        }
-
-        let chars = _cloneDeep(this.state.characters);
-        chars.push({
-            id: chars.length === 0 ? 1 : (Math.max.apply(null, chars.map(x => x.id)) || 0) + 1,
-            name,
-        });
-
-        this.saveCharacters(chars);
-
-        this.closeNewCharPrompt();
-
-        this.setState({
-            characters: chars,
-        });
-
-        if(chars.length === 1) {
-            this.props.onSelectCharacter(chars[0]);
-        }
-    }
-
-    saveCharacters = async (chars) => {
-        try {
-            await AsyncStorage.setItem("CharacterList", JSON.stringify(chars));
-        } catch (error) {
-            // Error saving data
-            console.log(error);
-        }
-    }
-
-    onSelectCharacter = (character) => {
-        this.props.onSelectCharacter(character);
-    }
-
-    onRenameCharacter = (character) => {
+    onStartRenameCharacter = (character) => {
         this.setState({
             renamingCharacter: character,
         });
@@ -96,39 +32,6 @@ export default class CharacterList extends React.Component {
         this.setState({
             renamingCharacter: null,
         });
-    }
-
-    renameCharacter = (newName) => {
-        let characters = _cloneDeep(this.state.characters);
-        let char = characters.find(x => x.id === this.state.renamingCharacter.id);
-        char.name = newName;
-
-        this.setState({
-            characters,
-        });
-
-        this.saveCharacters(characters);
-        this.closeRenamePrompt();
-    }
-
-    onDeleteCharacter = (character) => {
-        let characters = _cloneDeep(this.state.characters);
-        for(let i = 0; i < characters.length; i++) {
-            if(characters[i].id === character.id) {
-                characters.splice(i, 1);
-                break;
-            }
-        }
-
-        this.setState({
-            characters,
-        });
-
-        this.saveCharacters(characters);
-
-        if(this.props.activeCharacter && this.props.activeCharacter.id === character.id) {
-            this.props.onSelectCharacter(null);
-        }
     }
 
     render() {
@@ -150,9 +53,9 @@ export default class CharacterList extends React.Component {
                 renderItem={({item}) =>
                     <Character
                         {...item}
-                        onSelect={() => this.onSelectCharacter(item)}
-                        onEdit={() => this.onRenameCharacter(item)}
-                        onDelete={() => this.onDeleteCharacter(item)}
+                        onSelect={() => this.props.onSelectCharacter(item)}
+                        onEdit={() => this.onStartRenameCharacter(item)}
+                        onDelete={() => this.props.onDeleteCharacter(item)}
                         isActive={this.props.activeCharacter && this.props.activeCharacter.id === item.id} />
                 } />
         }
@@ -166,7 +69,7 @@ export default class CharacterList extends React.Component {
                         title="New Character Name"
                         visible={newCharPromptVisible}
                         onCancel={this.closeNewCharPrompt}
-                        onSubmit={this.createNewCharacter}
+                        onSubmit={(name) => { this.props.onCreateNewCharacter(name); this.closeNewCharPrompt(); }}
                     />
                 }
                 {renamingCharacter &&
@@ -174,7 +77,7 @@ export default class CharacterList extends React.Component {
                         title="New Character Name"
                         visible={renamingCharacter !== null}
                         onCancel={this.closeRenamePrompt}
-                        onSubmit={this.renameCharacter}
+                        onSubmit={(name) => { this.props.onRenameCharacter(name); this.closeRenamePrompt(); }}
                     />
                 }
             </View>

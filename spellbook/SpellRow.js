@@ -1,20 +1,41 @@
 import React, { Fragment } from 'react';
-import { Button, TouchableHighlight, Text } from 'react-native';
+import { Button, Text, TouchableHighlight, View } from 'react-native';
 
-const SpellRow = ({ Name, Description, onPress }) =>
-    <TouchableHighlight style={{
-            flex: 1,
-            flexDirection: 'row',
-            height: 60,
-            alignItems: 'center',
-            padding: 2,
-            marginTop: 2,
-            marginBottom: 2,
-        }}
-        onPress={onPress}>
-        <Fragment>
-            <Text>{Name}</Text>
-        </Fragment>
-    </TouchableHighlight>;
+export default class SpellRow extends React.Component {
+    state = {
+        opened: false,
+    }
 
-export default SpellRow;
+    toggleSpell = () => {
+        this.setState(prevState => ({
+            opened: !prevState.opened,
+        }));
+    }
+
+    render() {
+        const { name, description, onLongPress } = this.props;
+
+        return (
+            <TouchableHighlight style={{
+                padding: 2,
+                paddingTop: 5,
+                paddingBottom: 5,
+                marginTop: 2,
+                marginBottom: 2,
+                borderBottomColor: 'silver',
+                borderBottomWidth: 1,
+                borderStyle: 'solid',
+                justifyContent: 'center',
+            }}
+            onLongPress={onLongPress}
+            onPress={this.toggleSpell}>
+                <View style={{flexDirection: 'column'}}>
+                    <Text>{name}</Text>
+                    { this.state.opened &&
+                        <Text>{description}</Text>
+                    }
+                </View>
+            </TouchableHighlight>
+        );
+    }
+}
