@@ -289,10 +289,10 @@
     },
     {
        "name":"Shuffle",
-       "description":"L creatures instantly switch places."
+       "description":"L creatures instantly switch places. Determine where they end up randomly."
     },
     {
-       "name":"Determine where they end up randomly. Sleep",
+       "name":"Sleep",
        "description":"L creatures fall into a light sleep."
     },
     {

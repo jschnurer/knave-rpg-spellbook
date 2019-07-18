@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, ScrollView, Text, View } from 'react-native';
 import spells from './spells.json';
 import SpellRow from './SpellRow.js';
 
@@ -25,6 +25,18 @@ const Spellbook = ({ onAddFavorite, onRemoveFavorite, showFavorites, activeChara
         favorites = favorites.sort((a,b) => a.name < b.name ? -1 : 1);
 
         return (
+            <ScrollView>
+                {favorites.map(spell => 
+                    <SpellRow
+                        key={spell.name}
+                        onLongPress={() => onRemoveFavorite(spell)}
+                        {...spell}
+                />)}
+            </ScrollView>
+        );
+
+        /*
+        return (
             <FlatList
                 data={favorites}
                 keyExtractor={(item) => item.name}
@@ -36,20 +48,32 @@ const Spellbook = ({ onAddFavorite, onRemoveFavorite, showFavorites, activeChara
                     />
                 } />
         );
+        */
     }
 
     return (
-        <FlatList
-            data={spells}
-            keyExtractor={(item) => item.name}
-            extraData={this.props}
-            renderItem={({item}) =>
+        <ScrollView>
+            {spells.map(spell => 
                 <SpellRow
-                    onLongPress={() => onAddFavorite(item)}
-                    {...item}
-                />
-            } />
+                    key={spell.name}
+                    onLongPress={() => onAddFavorite(spell)}
+                    {...spell}
+            />)}
+        </ScrollView>
     );
+
+    // return (
+    //     <FlatList
+    //         data={spells}
+    //         keyExtractor={(item) => item.name}
+    //         extraData={this.props}
+    //         renderItem={({item}) =>
+    //             <SpellRow
+    //                 onLongPress={() => onAddFavorite(item)}
+    //                 {...item}
+    //             />
+    //         } />
+    // );
 }
 
 export default Spellbook;
