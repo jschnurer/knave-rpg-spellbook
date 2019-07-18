@@ -21,16 +21,18 @@ export default class App extends React.Component {
     loadData = async () => {
         try {
             let vals = await AsyncStorage.multiGet(['CharacterList', 'ActiveCharacterId']);
+
             if (vals === null) {
                 return;
             }
+
             let dict = vals.map(x => x === null
                     ? null
                     : ({ key: x[0], value: x[1] }))
                 .filter(x => x !== null);
 
             let characterList = dict.find(x => x.key === 'CharacterList');
-            if (!characterList) {
+            if (!characterList || !characterList.value) {
                 return;
             }
 
