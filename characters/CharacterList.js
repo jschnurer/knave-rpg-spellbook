@@ -1,87 +1,85 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { AsyncStorage, Button, FlatList, Text, TouchableHighlight, View } from 'react-native';
 import Prompt from 'rn-prompt';
 import _cloneDeep from 'lodash/cloneDeep';
 import Character from './Character';
+import { selectCharacter, createCharacter, renameCharacter, deleteCharacter } from '../redux/characterActions';
+import { ToastAndroid } from 'react-native';
 
-export default class CharacterList extends React.Component {
-    state = {
-        newCharPromptVisible: false,
-        renamingCharacter: null,
+export default function CharacterList(props) {
+    const [newCharVisible, setNewCharVisible] = useState(false);
+    const [charToRename, setCharToRename] = useState(null);
+    const {characters, selectedCharacterId} = useSelector(store => store.characterReducer);
+    const dispatch = useDispatch();
+
+    const showNewChar = useCallback(() => {
+        setNewCharVisible(true);
+    }, null);
+
+    const hideNewChar = useCallback(() => {
+        setNewCharVisible(false);
+    }, null);
+
+    let charList = null;
+
+    if (characters.length === 0) {
+        charList = <Text>You have no characters.</Text>;
+    } else {
+        charList = <FlatList
+            data={characters}
+            keyExtractor={(item) => item.id.toString()}
+            extraData={selectedCharacterId}
+            renderItem={({ item }) =>
+                <Character
+                    {...item}
+                    onSelect={() => dispatch(selectCharacter(item.id))}
+                    onEdit={() => setCharToRename(item)}
+                    onDelete={() => dispatch(deleteCharacter(item.id))}
+                    isActive={selectedCharacterId === item.id} />
+            } />
     }
 
-    openNewCharPrompt = () => {
-        this.setState({
-            newCharPromptVisible: true,
-        });
-    }
+    return (
+        <View style={{ flex: 1 }}>
+            <Button title="+ New Character" onPress={showNewChar} />
+            {charList}
+            {newCharVisible &&
+                <Prompt
+                    title="New Character Name"
+                    visible={newCharVisible}
+                    onCancel={hideNewChar}
+                    onSubmit={(name) => {
+                        if(!name || !name.trim()) {
+                            ToastAndroid.show(`Invalid name specified!`, ToastAndroid.SHORT);
+                            return;
+                        }
 
-    closeNewCharPrompt = () => {
-        this.setState({
-            newCharPromptVisible: false,
-        });
-    }
+                        if(characters.find(x => x.name === name)) {
+                            ToastAndroid.show(`Another character is already named ${name}!`, ToastAndroid.SHORT);
+                            return;
+                        }
+                        dispatch(createCharacter(name));
+                        hideNewChar();
+                    }}
+                />
+            }
+            {charToRename &&
+                <Prompt
+                    title="New Character Name"
+                    visible={charToRename !== null}
+                    onCancel={() => setCharToRename(null)}
+                    onSubmit={(name) => {
+                        if(characters.find(x => x.id !== charToRename.id && x.name === name)) {
+                            ToastAndroid.show(`Another character is already named ${name}!`, ToastAndroid.SHORT);
+                            return;
+                        }
 
-    onStartRenameCharacter = (character) => {
-        this.setState({
-            renamingCharacter: character,
-        });
-    }
-
-    closeRenamePrompt = () => {
-        this.setState({
-            renamingCharacter: null,
-        });
-    }
-
-    render() {
-        const {isLoading, newCharPromptVisible, renamingCharacter} = this.state;
-        const {characters} = this.props;
-
-        if(isLoading) {
-            return <Text>Loading...</Text>;
-        }
-
-        let charList = null;
-
-        if(characters.length === 0) {
-            charList = <Text>You have no characters.</Text>;
-        } else {
-            charList = <FlatList
-                data={characters}
-                keyExtractor={(item) => item.id.toString()}
-                extraData={this.props}
-                renderItem={({item}) =>
-                    <Character
-                        {...item}
-                        onSelect={() => this.props.onSelectCharacter(item)}
-                        onEdit={() => this.onStartRenameCharacter(item)}
-                        onDelete={() => this.props.onDeleteCharacter(item)}
-                        isActive={this.props.activeCharacter && this.props.activeCharacter.id === item.id} />
-                } />
-        }
-
-        return (
-            <View style={{flex: 1}}>
-                <Button title="+ New Character" onPress={this.openNewCharPrompt} />
-                {charList}
-                {newCharPromptVisible &&
-                    <Prompt
-                        title="New Character Name"
-                        visible={newCharPromptVisible}
-                        onCancel={this.closeNewCharPrompt}
-                        onSubmit={(name) => { this.props.onCreateNewCharacter(name); this.closeNewCharPrompt(); }}
-                    />
-                }
-                {renamingCharacter &&
-                    <Prompt
-                        title="New Character Name"
-                        visible={renamingCharacter !== null}
-                        onCancel={this.closeRenamePrompt}
-                        onSubmit={(name) => { this.props.onRenameCharacter(name, renamingCharacter); this.closeRenamePrompt(); }}
-                    />
-                }
-            </View>
-        );
-    }
+                        dispatch(renameCharacter(charToRename, name));
+                        setCharToRename(null);
+                    }}
+                />
+            }
+        </View>
+    );
 }

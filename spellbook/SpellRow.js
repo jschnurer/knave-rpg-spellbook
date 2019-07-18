@@ -1,39 +1,27 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Button, Text, TouchableOpacity, View } from 'react-native';
 
-export default class SpellRow extends React.Component {
-    state = {
-        opened: false,
-    }
+export default function SpellRow({ name, description, onLongPress }) {
+    const [opened, setOpened] = useState(false);
 
-    toggleSpell = () => {
-        this.setState(prevState => ({
-            opened: !prevState.opened,
-        }));
-    }
-
-    render() {
-        const { name, description, onLongPress } = this.props;
-
-        return (
-            <TouchableOpacity style={{
-                padding: 2,
-                paddingTop: 20,
-                paddingBottom: 20,
-                borderBottomColor: 'silver',
-                borderBottomWidth: 1,
-                borderStyle: 'solid',
-                justifyContent: 'center',
-            }}
+    return (
+        <TouchableOpacity style={{
+            padding: 2,
+            paddingTop: 20,
+            paddingBottom: 20,
+            borderBottomColor: 'silver',
+            borderBottomWidth: 1,
+            borderStyle: 'solid',
+            justifyContent: 'center',
+        }}
             onLongPress={onLongPress}
-            onPress={this.toggleSpell}>
-                <View style={{flexDirection: 'column'}}>
-                    <Text style={{color: 'black'}}>{name}</Text>
-                    { this.state.opened &&
-                        <Text style={{color: '#666', marginTop: 5, }}>{description}</Text>
-                    }
-                </View>
-            </TouchableOpacity>
-        );
-    }
+            onPress={() => setOpened(!opened)}>
+            <View style={{ flexDirection: 'column' }}>
+                <Text style={{ color: 'black' }}>{name}</Text>
+                {opened &&
+                    <Text style={{ color: '#666', marginTop: 5, }}>{description}</Text>
+                }
+            </View>
+        </TouchableOpacity>
+    );
 }

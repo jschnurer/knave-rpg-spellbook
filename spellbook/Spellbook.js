@@ -1,79 +1,61 @@
 import React from 'react';
-import { FlatList, ScrollView, Text, View } from 'react-native';
+import { FlatList, Text } from 'react-native';
 import spells from './spells.json';
 import SpellRow from './SpellRow.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFavorite, deleteFavorite } from '../redux/characterActions';
+import * as Haptics from 'expo-haptics';
 
-const Spellbook = ({ onAddFavorite, onRemoveFavorite, showFavorites, activeCharacter }) => {
-    if(showFavorites) {
-        if(!activeCharacter) {
+const Spellbook = ({ showFavorites }) => {
+    const dispatch = useDispatch();
+    const { characters, selectedCharacterId } = useSelector(store => store.characterReducer);
+    const activeCharacter = characters.find(x => x.id === selectedCharacterId);
+
+    if (showFavorites) {
+        if (!selectedCharacterId
+            || !activeCharacter) {
             return <Text>Select a character first.</Text>;
         }
 
-        if(!activeCharacter.favorites
+        if (!activeCharacter.favorites
             || activeCharacter.favorites.length === 0) {
             return <Text>The character has no favorite spells.</Text>
         }
 
-        let favorites = [];
-        for(let i = 0; i < activeCharacter.favorites.length; i++) {
-            let spell = spells.find(x => x.name === activeCharacter.favorites[i]);
-            if(spell) {
-                favorites.push(spell);
-            }
-        }
+        let favorites = spells
+            .filter(x => activeCharacter.favorites.indexOf(x.name) > -1)
+            .sort((a, b) => a.name < b.name ? -1 : 1);
 
-        favorites = favorites.sort((a,b) => a.name < b.name ? -1 : 1);
-
-        return (
-            <ScrollView>
-                {favorites.map(spell => 
-                    <SpellRow
-                        key={spell.name}
-                        onLongPress={() => onRemoveFavorite(spell)}
-                        {...spell}
-                />)}
-            </ScrollView>
-        );
-
-        /*
         return (
             <FlatList
                 data={favorites}
                 keyExtractor={(item) => item.name}
-                extraData={this.props}
-                renderItem={({item}) =>
+                renderItem={({ item }) =>
                     <SpellRow
-                        onLongPress={() => onRemoveFavorite(item)}
+                        onLongPress={() => {
+                            dispatch(removeFavorite(selectedCharacterId, item.name));
+                            Haptics.selectionAsync();
+                        }}
                         {...item}
                     />
                 } />
         );
-        */
     }
 
     return (
-        <ScrollView>
-            {spells.map(spell => 
+        <FlatList
+            data={spells}
+            keyExtractor={(item) => item.name}
+            renderItem={({ item }) =>
                 <SpellRow
-                    key={spell.name}
-                    onLongPress={() => onAddFavorite(spell)}
-                    {...spell}
-            />)}
-        </ScrollView>
+                    onLongPress={() => {
+                        dispatch(addFavorite(selectedCharacterId, item.name));
+                        Haptics.selectionAsync();
+                    }}
+                    {...item}
+                />
+            } />
     );
-
-    // return (
-    //     <FlatList
-    //         data={spells}
-    //         keyExtractor={(item) => item.name}
-    //         extraData={this.props}
-    //         renderItem={({item}) =>
-    //             <SpellRow
-    //                 onLongPress={() => onAddFavorite(item)}
-    //                 {...item}
-    //             />
-    //         } />
-    // );
 }
 
 export default Spellbook;
