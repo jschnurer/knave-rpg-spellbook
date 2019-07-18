@@ -41,8 +41,19 @@ export default function CharacterList(props) {
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <Button title="+ New Character" onPress={showNewChar} />
+        <View style={{
+            flex: 1,
+            marginTop: 20,
+        }}>
+            <Button
+                title="+ New Character"
+                onPress={showNewChar}
+                
+            />
+            <View style={{
+                    marginBottom: 20,
+                }}>
+            </View>
             {charList}
             {newCharVisible &&
                 <Prompt

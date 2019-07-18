@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, Text } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import spells from './spells.json';
 import SpellRow from './SpellRow.js';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,39 +11,36 @@ const Spellbook = ({ showFavorites }) => {
     const { characters, selectedCharacterId } = useSelector(store => store.characterReducer);
     const activeCharacter = characters.find(x => x.id === selectedCharacterId);
 
+    var body = null;
+
     if (showFavorites) {
         if (!selectedCharacterId
             || !activeCharacter) {
-            return <Text>Select a character first.</Text>;
-        }
-
-        if (!activeCharacter.favorites
+            body = <Text>Select a character first.</Text>;
+        } else if (!activeCharacter.favorites
             || activeCharacter.favorites.length === 0) {
-            return <Text>The character has no favorite spells.</Text>
-        }
+            body = <Text>The character has no favorite spells.</Text>
+        } else {
 
-        let favorites = spells
-            .filter(x => activeCharacter.favorites.indexOf(x.name) > -1)
-            .sort((a, b) => a.name < b.name ? -1 : 1);
+            let favorites = spells
+                .filter(x => activeCharacter.favorites.indexOf(x.name) > -1)
+                .sort((a, b) => a.name < b.name ? -1 : 1);
 
-        return (
-            <FlatList
+            body = <FlatList
                 data={favorites}
                 keyExtractor={(item) => item.name}
                 renderItem={({ item }) =>
                     <SpellRow
                         onLongPress={() => {
-                            dispatch(removeFavorite(selectedCharacterId, item.name));
+                            dispatch(deleteFavorite(selectedCharacterId, item.name));
                             Haptics.selectionAsync();
                         }}
                         {...item}
                     />
                 } />
-        );
-    }
-
-    return (
-        <FlatList
+        }
+    } else {
+        body = <FlatList
             data={spells}
             keyExtractor={(item) => item.name}
             renderItem={({ item }) =>
@@ -55,6 +52,14 @@ const Spellbook = ({ showFavorites }) => {
                     {...item}
                 />
             } />
+    }
+
+    return (
+        <View style={{
+            padding: 10,
+        }}>
+            {body}
+        </View>
     );
 }
 
