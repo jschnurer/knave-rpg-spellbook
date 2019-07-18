@@ -107,7 +107,7 @@ export default class App extends React.Component {
         });
 
         if (chars.length === 1) {
-            this.props.onSelectCharacter(chars[0]);
+            this.onSelectCharacter(chars[0]);
         }
     }
 

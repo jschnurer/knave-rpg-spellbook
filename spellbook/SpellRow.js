@@ -18,8 +18,8 @@ export default class SpellRow extends React.Component {
         return (
             <TouchableOpacity style={{
                 padding: 2,
-                paddingTop: 15,
-                paddingBottom: 15,
+                paddingTop: 20,
+                paddingBottom: 20,
                 borderBottomColor: 'silver',
                 borderBottomWidth: 1,
                 borderStyle: 'solid',
@@ -30,7 +30,7 @@ export default class SpellRow extends React.Component {
                 <View style={{flexDirection: 'column'}}>
                     <Text style={{color: 'black'}}>{name}</Text>
                     { this.state.opened &&
-                        <Text style={{color: '#666'}}>{description}</Text>
+                        <Text style={{color: '#666', marginTop: 5, }}>{description}</Text>
                     }
                 </View>
             </TouchableOpacity>
