@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Knave RPG Spellbook",
+    "name": "Knave Spellbook",
     "slug": "knave-rpg-spellbook",
     "description": "A simple spellbook app for the Knave RPG system.",
     "privacy": "unlisted",
