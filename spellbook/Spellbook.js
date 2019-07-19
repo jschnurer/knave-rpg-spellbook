@@ -19,7 +19,7 @@ const Spellbook = ({ showFavorites }) => {
             body = <Text>Select a character first.</Text>;
         } else if (!activeCharacter.favorites
             || activeCharacter.favorites.length === 0) {
-            body = <Text>The character has no favorite spells.</Text>
+            body = <Text>The character has no favorite spells.</Text>;
         } else {
 
             let favorites = spells
@@ -37,7 +37,7 @@ const Spellbook = ({ showFavorites }) => {
                         }}
                         {...item}
                     />
-                } />
+                } />;
         }
     } else {
         body = <FlatList
@@ -51,7 +51,7 @@ const Spellbook = ({ showFavorites }) => {
                     }}
                     {...item}
                 />
-            } />
+            } />;
     }
 
     return (

@@ -29,6 +29,7 @@ export default function SpellbookApp() {
             }}
             style={{
                 marginTop: Constants.statusBarHeight,
+                backgroundColor: '#fff',
             }}
         />
     );

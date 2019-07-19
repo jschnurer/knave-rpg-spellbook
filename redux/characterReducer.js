@@ -39,6 +39,17 @@ const characterReducer = (state = initialState, action) => {
                 selectedCharacterId: action.characterId,
             };
         }
+        case 'RENAME_CHARACTER': {
+            let characters = _cloneDeep(state.characters);
+            characters.filter(x => x.id === action.characterId)
+                .forEach(x => {
+                    x.name = action.name;
+                });
+            return {
+                ...state,
+                characters,
+            };
+        }
         case 'ADD_FAVORITE': {
             let characters = _cloneDeep(state.characters);
             characters.filter(x => x.id === action.characterId)

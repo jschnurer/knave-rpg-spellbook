@@ -43,7 +43,7 @@ export default function CharacterList(props) {
     return (
         <View style={{
             flex: 1,
-            marginTop: 20,
+            padding: 10,
         }}>
             <Button
                 title="+ New Character"
@@ -51,7 +51,7 @@ export default function CharacterList(props) {
                 
             />
             <View style={{
-                    marginBottom: 20,
+                    marginBottom: 10,
                 }}>
             </View>
             {charList}
@@ -86,7 +86,7 @@ export default function CharacterList(props) {
                             return;
                         }
 
-                        dispatch(renameCharacter(charToRename, name));
+                        dispatch(renameCharacter(charToRename.id, name));
                         setCharToRename(null);
                     }}
                 />

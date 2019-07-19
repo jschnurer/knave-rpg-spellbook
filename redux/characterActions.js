@@ -13,10 +13,10 @@ export const createCharacter = (name) => ({
     name,
 })
 
-export const renameCharacter = (character, newName) => ({
+export const renameCharacter = (characterId, name) => ({
     type: 'RENAME_CHARACTER',
-    character,
-    newName,
+    characterId,
+    name,
 })
 
 export const addFavorite = (characterId, spellName) => ({
