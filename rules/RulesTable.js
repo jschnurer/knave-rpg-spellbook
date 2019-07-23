@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import BoldText from './BoldText';
 
-const RulesTable = ({ headers, rows }) =>
+const RulesTable = ({ headers, rows, firstCellFlex }) =>
     <View style={{
         flex: 1,
         alignItems: 'center',
@@ -12,19 +12,28 @@ const RulesTable = ({ headers, rows }) =>
         borderStyle: 'solid',
         borderWidth: 1,
     }}>
-        <RulesRow isHeader values={headers.map(x => <BoldText>{x}</BoldText>)} />
+        <RulesRow
+            firstCellFlex={firstCellFlex}
+            isHeader
+            values={headers.map(x => <BoldText>{x}</BoldText>)}
+        />
+
         {rows.map((x, ix) => 
-            <RulesRow key={ix} values={x} />
+            <RulesRow
+                firstCellFlex={firstCellFlex}
+                key={ix}
+                values={x}
+            />
         )}
     </View>;
 
 export default RulesTable;
 
-const RulesRow = ({ isHeader, values }) =>
+const RulesRow = ({ firstCellFlex, isHeader, values }) =>
     <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
         {values.map((x, ix) =>
             <View style={{
-                flex: 1,
+                flex: firstCellFlex || 1,
                 alignSelf: 'stretch',
                 borderColor: '#D0CECE',
                 borderStyle: 'solid',
