@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import BoldText from './BoldText';
 
 const RulesTable = ({ headers, rows }) =>
     <View style={{
@@ -11,7 +12,7 @@ const RulesTable = ({ headers, rows }) =>
         borderStyle: 'solid',
         borderWidth: 1,
     }}>
-        <RulesRow isHeader values={headers} />
+        <RulesRow isHeader values={headers.map(x => <BoldText>{x}</BoldText>)} />
         {rows.map((x, ix) => 
             <RulesRow key={ix} values={x} />
         )}
@@ -30,7 +31,12 @@ const RulesRow = ({ isHeader, values }) =>
                 borderWidth: 1,
                 backgroundColor: isHeader ? '#D0CECE' : '#F1F1F1',
             }} key={ix}>
-                <Text style={isHeader ? {fontWeight: 'bold'} : undefined}>{x}</Text>
+                { (typeof(x) === 'number' || typeof(x) === 'string') &&
+                    <Text>{x}</Text>
+                }
+                { typeof(x) !== 'number' && typeof(x) !== 'string' &&
+                    x
+                }
             </View>
         )}
     </View>;

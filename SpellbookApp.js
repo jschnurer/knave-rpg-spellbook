@@ -8,7 +8,7 @@ import Rules from './rules/Rules';
 
 export default function SpellbookApp() {
     const [navState, setNavState] = useState({
-        index: 0,
+        index: 3,
         routes: [
             { key: 'characters', title: 'Chars' },
             { key: 'favorites', title: 'Favs' },
